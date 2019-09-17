@@ -4,37 +4,31 @@ import { Model } from 'mongoose';
 import { Post } from './interfaces/post.interface';
 import { CreatePostDTO } from './dto/create-post.dto';
 import { POST_MODEL_PROVIDER } from '../constants';
+import { BlogRepository } from './blog.repository';
 
 @Injectable()
 export class BlogService {
-    constructor(@Inject(POST_MODEL_PROVIDER) private readonly postModel: Model<Post>) { }
+    constructor(private blogRepository: BlogRepository) { }
 
-    async getPosts(): Promise<Post[]> {
-        const posts = await this.postModel.find().exec();
-        return posts;
+    async getPosts(): Promise<CreatePostDTO[]> {
+        return this.blogRepository.getAll();
     }
 
-    async getPost(postID): Promise<Post> {
-        const post = await this.postModel
-            .findById(postID)
-            .exec();
-        return post;
+    async getPost(postID): Promise<CreatePostDTO> {
+        return this.blogRepository.findById(postID);
     }
 
-    async addPost(createPostDTO: CreatePostDTO): Promise<Post> {
-        const newPost = await new this.postModel(createPostDTO);
-        return newPost.save();
+    async addPost(createPostDTO: CreatePostDTO): Promise<CreatePostDTO> {
+        return this.blogRepository.create(createPostDTO);
     }
 
-    async editPost(postID, createPostDTO: CreatePostDTO): Promise<Post> {
-        const editedPost = await this.postModel
-            .findByIdAndUpdate(postID, createPostDTO, { new: true });
-        return editedPost;
-    }
+    // async editPost(postID, createPostDTO: CreatePostDTO): Promise<Post> {
+    //     const editedPost = await this.postModel
+    //         .findByIdAndUpdate(postID, createPostDTO, { new: true });
+    //     return editedPost;
+    // }
 
     async deletePost(postID): Promise<any> {
-        const deletedPost = await this.postModel
-            .findByIdAndRemove(postID);
-        return deletedPost;
+        return this.blogRepository.deleteById(postID);
     }
 }

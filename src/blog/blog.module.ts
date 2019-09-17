@@ -6,12 +6,13 @@ import { BlogSchema } from './schemas/blog.schema';
 import { DatabaseModule } from '../database/database.module';
 import { blogProvider } from './blog.provider';
 import { POST_MODEL_PROVIDER } from '../constants';
+import { BlogRepository } from './blog.repository';
 
 @Module({
   imports: [DatabaseModule,
     // MongooseModule.forFeature([{ name: POST_MODEL_PROVIDER, schema: BlogSchema }]),
   ],
-  providers: [BlogService, ...blogProvider],
+  providers: [BlogService, ...blogProvider, BlogRepository],
   controllers: [BlogController],
 })
 export class BlogModule { }

@@ -7,7 +7,7 @@ import { DB_URL } from './constants';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [// MongooseModule.forRoot(DB_URL, { useNewUrlParser: true }),
+  imports: [ // MongooseModule.forRoot(DB_URL, { useNewUrlParser: true }),
     BlogModule, DatabaseModule],
   controllers: [AppController],
   providers: [AppService],
